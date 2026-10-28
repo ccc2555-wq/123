@@ -95,6 +95,14 @@ section{padding:72px 0}
 @media (min-width:720px){.key-grid{grid-template-columns:repeat(2,1fr)}}
 @media (min-width:1024px){.about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:start}.key-grid{margin-top:0}}
 
+/* ============ 城市影像 ============ */
+.video-card{background:#0c1c14;border:1px solid rgba(200,162,74,.35);border-radius:16px;overflow:hidden;box-shadow:0 14px 34px rgba(12,28,20,.35)}
+.video-card video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+.video-cap{margin-top:14px;font-size:14px;color:#aab89f}
+.video-cap b{color:#f3ecd9}
+.sec-dark .sec-head h2{color:#f3ecd9}
+.sec-dark .sec-head p{color:#aab89f}
+
 /* ============ 时间轴 ============ */
 .timeline{position:relative;margin-top:10px;--date:86px;--axis:44px;--gap:14px}
 .tl{display:grid;grid-template-columns:var(--date) var(--axis) 1fr;gap:0 var(--gap);padding:0 0 30px;position:relative}
@@ -188,6 +196,7 @@ footer .tail{margin-top:30px;border-top:1px solid rgba(200,162,74,.22);padding-t
     <a class="brand" href="#hero"><span class="seal">蓉</span>成都 · 天府之国</a>
     <nav class="nav-links" aria-label="页面导航">
       <a href="#about">概览</a>
+      <a href="#video">影像</a>
       <a href="#history">历史</a>
       <a href="#places">地标</a>
       <a href="#food">美食</a>
@@ -245,11 +254,29 @@ footer .tail{margin-top:30px;border-top:1px solid rgba(200,162,74,.22);padding-t
   </div>
 </section>
 
+<!-- ===== 城市影像 ===== -->
+<section class="sec-dark" id="video">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="no">02 · 影像</span>
+      <h2>五分钟，看见一座城</h2>
+      <p>从川剧的唱腔到赛场的呐喊，从地铁里的熊猫到雪山下的大城——这是你提供的成都城市形象宣传片。</p>
+    </div>
+    <div class="video-card">
+      <video controls preload="metadata" playsinline aria-label="成都城市形象宣传片">
+        <source src="assets/chengdu-promo.mp4" type="video/mp4">
+        您的浏览器不支持 HTML5 视频播放。
+      </video>
+    </div>
+    <p class="video-cap"><b>成都城市形象宣传片</b> · 时长 5 分 34 秒 · 素材由你提供，已压缩为网页版（640×360，约 20 MB），点击画面播放。</p>
+  </div>
+</section>
+
 <!-- ===== 历史 ===== -->
 <section class="sec-alt" id="history">
   <div class="wrap">
     <div class="sec-head">
-      <span class="no">02 · 历史</span>
+      <span class="no">03 · 历史</span>
       <h2>三千年的城，照见古今</h2>
       <p>从古蜀文明到世界都市，成都的历史是一条从未断流的文脉。</p>
     </div>
@@ -292,7 +319,7 @@ footer .tail{margin-top:30px;border-top:1px solid rgba(200,162,74,.22);padding-t
 <section id="places">
   <div class="wrap">
     <div class="sec-head">
-      <span class="no">03 · 地标</span>
+      <span class="no">04 · 地标</span>
       <h2>从熊猫基地到宽窄巷子</h2>
       <p>成都的每一处地标，都藏着一份独特的城市记忆。</p>
     </div>
@@ -337,7 +364,7 @@ footer .tail{margin-top:30px;border-top:1px solid rgba(200,162,74,.22);padding-t
 <section class="sec-alt" id="food">
   <div class="wrap">
     <div class="sec-head">
-      <span class="no">04 · 美食</span>
+      <span class="no">05 · 美食</span>
       <h2>世界美食之都，麻与辣的盛宴</h2>
       <p>川菜的灵魂是“一菜一格，百菜百味”。成都的餐桌，是麻辣鲜香的交响曲，也是市井烟火的日常。</p>
     </div>
@@ -366,7 +393,7 @@ footer .tail{margin-top:30px;border-top:1px solid rgba(200,162,74,.22);padding-t
 <section id="data">
   <div class="wrap">
     <div class="sec-head">
-      <span class="no">05 · 数据</span>
+      <span class="no">06 · 数据</span>
       <h2>用数字看见成都</h2>
       <p>以下数据均来自成都市统计局《2024 年成都市国民经济和社会发展统计公报》；历年 GDP 为第五次全国经济普查修订口径。</p>
     </div>
@@ -390,7 +417,7 @@ footer .tail{margin-top:30px;border-top:1px solid rgba(200,162,74,.22);padding-t
 <section class="sec-dark" id="life">
   <div class="wrap">
     <div class="sec-head">
-      <span class="no">06 · 生活</span>
+      <span class="no">07 · 生活</span>
       <h2 style="color:#f3ecd9">有一种幸福，叫成都</h2>
       <p style="color:#aab89f">城市可以很拼，生活也可以很慢——这是成都教给世界的平衡之道。</p>
     </div>
@@ -421,7 +448,7 @@ footer .tail{margin-top:30px;border-top:1px solid rgba(200,162,74,.22);padding-t
         <h4>素材说明</h4>
         <ul>
           <li>图片经网络检索获得（图虫创意、视觉中国、千图网、百科等），版权归原作者所有，仅用于学习展示</li>
-          <li>背景音乐：蔡琴《明月几时有》（用户提供，词·苏轼），需手动点击播放</li>
+          <li>宣传片：成都城市形象宣传片（用户提供，已压缩为网页版）；背景音乐：蔡琴《明月几时有》（用户提供，词·苏轼），均需手动点击播放</li>
         </ul>
       </div>
     </div>
