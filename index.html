@@ -1,50 +1,494 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>个人名片</title>
-  <!-- 引入外部样式文件，实现结构与样式分离 -->
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="成都——天府之国、雪山下的公园城市。一座三千年城址未改的历史名城，一座火锅飘香、熊猫相伴、节奏从容的烟火之城。">
+<title>成都 · 天府之国 — 雪山下的公园城市</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='2' y='2' width='60' height='60' rx='14' fill='%23b6432e'/%3E%3Ctext x='32' y='45' font-size='36' text-anchor='middle' fill='%23f5efe1' font-family='serif' font-weight='700'%3E蓉%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600;700;900&amp;family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
+<script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<style>
+/* ============ 设计令牌 ============ */
+:root{
+  --pine-900:#0c1c14;
+  --pine-800:#122a1e;
+  --pine-700:#1a3a2a;
+  --jade:#2f7d5c;
+  --jade-deep:#1e5c41;
+  --jade-light:#9cc4ad;
+  --red:#b6432e;
+  --red-deep:#8f3323;
+  --gold:#c8a24a;
+  --paper:#f5efe1;
+  --paper-2:#efe6d0;
+  --card:#fbf7ec;
+  --ink:#262219;
+  --muted:#6d6a5c;
+  --line:#ddd3ba;
+  --serif:"Noto Serif SC","Songti SC","STSong",serif;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.75;font-size:16px}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+/* ============ 顶部导航 ============ */
+.nav{position:sticky;top:0;z-index:60;background:rgba(12,28,20,.92);backdrop-filter:blur(6px);color:#f0ead8;border-bottom:1px solid rgba(200,162,74,.25)}
+.nav-in{display:flex;align-items:center;gap:18px;height:62px}
+.brand{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:.06em;display:flex;align-items:center;gap:9px}
+.brand .seal{width:30px;height:30px;border-radius:8px;background:var(--red);color:#f5efe1;display:inline-flex;align-items:center;justify-content:center;font-size:17px}
+.nav-links{display:none;margin-left:auto;gap:4px}
+.nav-links a{padding:8px 13px;border-radius:8px;font-size:15px;color:#cfd8c6;transition:background .18s,color .18s}
+.nav-links a:hover{background:rgba(200,162,74,.16);color:#f5efe1}
+.nav-extra{margin-left:auto;display:flex;align-items:center;gap:10px}
+.music-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(200,162,74,.45);background:transparent;color:#eadfbe;border-radius:999px;padding:7px 15px;font-size:14px;font-family:var(--sans);cursor:pointer;transition:background .18s,color .18s}
+.music-btn:hover{background:rgba(200,162,74,.18)}
+.music-btn.playing{background:var(--red);border-color:var(--red);color:#fdf6ea}
+.music-btn svg{width:15px;height:15px;fill:currentColor}
+@media (min-width:820px){.nav-links{display:flex}}
+
+/* ============ Hero ============ */
+.hero{position:relative;min-height:88vh;display:flex;align-items:center;color:#f3eddc;overflow:hidden;background:var(--pine-900)}
+.hero-bg{position:absolute;inset:0;background:url(assets/hero-chengdu-skyline.jpg) center/cover no-repeat}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(12,28,20,.82) 8%,rgba(18,42,30,.62) 55%,rgba(12,28,20,.88) 100%)}
+.hero-word{position:absolute;right:-14px;top:46px;font-family:var(--serif);font-weight:900;font-size:clamp(7rem,26vw,20rem);line-height:1;color:rgba(200,162,74,.13);writing-mode:vertical-rl;user-select:none;pointer-events:none}
+.hero-in{position:relative;z-index:2;padding-block:96px 84px}
+.hero .kicker{display:inline-flex;align-items:center;gap:10px;font-size:14px;letter-spacing:.32em;color:var(--gold);margin-bottom:22px}
+.hero .kicker::before{content:"";width:34px;height:1px;background:var(--gold)}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(2.7rem,7.6vw,4.9rem);line-height:1.12;letter-spacing:.02em;text-wrap:balance}
+.hero h1 .hl{color:var(--gold)}
+.hero .sub{margin-top:20px;font-size:clamp(1.02rem,2.4vw,1.3rem);color:#d8e0cf;max-width:34em}
+.hero .sub b{color:#f5efe1;font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:44px;max-width:860px}
+.stat{background:rgba(255,255,255,.07);border:1px solid rgba(200,162,74,.28);border-radius:14px;padding:16px 18px}
+.stat .num{font-family:var(--serif);font-weight:700;font-size:clamp(1.5rem,3.6vw,2.1rem);color:#f8f2e2;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.stat .num em{font-style:normal;font-size:.55em;color:var(--gold);margin-left:4px}
+.stat .lab{margin-top:4px;font-size:13px;color:#b9c4ae}
+.stat .src{font-size:11.5px;color:#8fa08c;margin-top:2px}
+@media (min-width:760px){.stats{grid-template-columns:repeat(4,1fr)}}
+
+/* ============ 章节通用 ============ */
+section{padding:72px 0}
+.sec-head{margin-bottom:38px;max-width:760px}
+.sec-head .no{font-family:var(--serif);color:var(--red);font-size:14px;letter-spacing:.3em;display:block;margin-bottom:10px}
+.sec-head h2{font-family:var(--serif);font-weight:900;font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.25;letter-spacing:.02em}
+.sec-head h2::after{content:"";display:block;width:52px;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:2px;margin-top:16px}
+.sec-head p{margin-top:16px;color:var(--muted);font-size:15.5px}
+.sec-alt{background:var(--paper-2)}
+.sec-dark{background:var(--pine-900);color:#efe8d6}
+
+/* ============ 概览 ============ */
+.about-grid{display:grid;grid-template-columns:1fr;gap:20px}
+.about-copy{font-size:16.5px;max-width:60em}
+.about-copy p+p{margin-top:14px}
+.about-copy .lead{font-size:18.5px;font-family:var(--serif);color:var(--pine-800);font-weight:600;line-height:1.9}
+.key-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:34px}
+.key{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:12px;padding:18px 20px}
+.key h3{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--pine-800);margin-bottom:6px}
+.key p{font-size:14.5px;color:var(--muted)}
+@media (min-width:720px){.key-grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1024px){.about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:start}.key-grid{margin-top:0}}
+
+/* ============ 时间轴 ============ */
+.timeline{position:relative;margin-top:10px;--date:86px;--axis:44px;--gap:14px}
+.tl{display:grid;grid-template-columns:var(--date) var(--axis) 1fr;gap:0 var(--gap);padding:0 0 30px;position:relative}
+.tl:last-child{padding-bottom:6px}
+.tl .tl-time{font-family:var(--serif);font-weight:700;color:var(--red-deep);font-size:15px;padding-top:2px;text-align:right;font-variant-numeric:tabular-nums}
+.tl .tl-dot{justify-self:center;width:15px;height:15px;border-radius:50%;background:var(--red);border:3px solid var(--paper);margin-top:4px;position:relative;z-index:2;box-shadow:0 0 0 1px var(--red)}
+.tl .tl-body{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+.tl .tl-body h3{font-family:var(--serif);font-size:16.5px;color:var(--pine-800);margin-bottom:4px}
+.tl .tl-body p{font-size:14px;color:var(--muted)}
+/* 轴线与圆点引用同一组列宽变量，中心必然重合 */
+.timeline::before{content:"";position:absolute;left:calc(var(--date) + var(--gap) + var(--axis)/2 - 1px);top:10px;bottom:8px;width:2px;background:linear-gradient(var(--red),var(--gold));}
+.tl .tl-dot::before{content:"";position:absolute;top:50%;transform:translateY(-50%);left:calc(-1*var(--gap) - (var(--axis) - 15px)/2);width:calc(var(--gap) + (var(--axis) - 15px)/2);height:2px;background:var(--red);opacity:.45}
+@media (max-width:719px){
+  .timeline{--date:72px;--axis:18px;--gap:10px}
+}
+
+/* ============ 地标 ============ */
+.places-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.place{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease,border-color .2s ease}
+.place:hover{transform:translateY(-4px);border-color:var(--red)}
+.place .ph{aspect-ratio:4/3;background-size:cover;background-position:center;position:relative}
+.place .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,28,20,0) 55%,rgba(12,28,20,.42))}
+.place .ph .tag{position:absolute;left:14px;bottom:12px;z-index:2;background:rgba(12,28,20,.72);color:#f2ecd8;font-size:12.5px;padding:4px 11px;border-radius:999px;letter-spacing:.08em}
+.place .icon{height:118px;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,var(--pine-800),var(--jade-deep));position:relative}
+.place .icon svg{width:52px;height:52px;fill:#e9dfbe;opacity:.92}
+.place .bd{padding:16px 18px 18px}
+.place h3{font-family:var(--serif);font-size:17.5px;color:var(--pine-800);margin-bottom:6px}
+.place p{font-size:14px;color:var(--muted)}
+@media (min-width:600px){.places-grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1024px){.places-grid{grid-template-columns:repeat(4,1fr)}}
+
+/* ============ 美食 ============ */
+.food-show{display:grid;grid-template-columns:1fr;gap:26px;align-items:center;margin-bottom:34px}
+.food-pic{border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 10px 30px rgba(26,32,20,.14)}
+.food-pic img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.food-txt h3{font-family:var(--serif);font-size:22px;color:var(--pine-800);margin-bottom:10px}
+.food-txt p{font-size:15.5px;color:var(--muted)}
+.food-txt .badge{display:inline-block;margin-top:14px;background:var(--red);color:#fbf3e6;font-size:13px;padding:5px 14px;border-radius:999px;letter-spacing:.06em}
+.dish-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.dish{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:flex;gap:14px;align-items:baseline}
+.dish .idx{font-family:var(--serif);font-weight:700;color:var(--red);font-size:15px;flex:none}
+.dish .d-name{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--pine-800);flex:none}
+.dish p{font-size:13.5px;color:var(--muted)}
+@media (min-width:640px){.dish-grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1024px){.food-show{grid-template-columns:1fr 1.1fr;gap:44px}.dish-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ============ 数据 ============ */
+.data-wrap{display:grid;grid-template-columns:1fr;gap:26px}
+.chart-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 18px 16px}
+.chart-card h3{font-family:var(--serif);font-size:17.5px;color:var(--pine-800);margin-bottom:4px}
+.chart-card .note{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+.chart{width:100%;height:300px}
+.data-src{margin-top:16px;font-size:12.5px;color:var(--muted);line-height:1.7}
+.data-src a{color:var(--jade-deep);text-decoration:underline}
+@media (min-width:1024px){.data-wrap{grid-template-columns:1fr 1fr}}
+
+/* ============ 生活 ============ */
+.life-grid{display:grid;grid-template-columns:1fr;gap:20px}
+.life{background:rgba(255,255,255,.05);border:1px solid rgba(200,162,74,.3);border-radius:14px;padding:26px 24px}
+.life .big{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,6vw,3rem);color:var(--gold);line-height:1}
+.life p{margin-top:12px;font-size:15px;color:#c9d2c2}
+.quote{margin-top:38px;background:rgba(200,162,74,.1);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:24px 26px}
+.quote p{font-family:var(--serif);font-size:clamp(1.1rem,2.6vw,1.45rem);color:#f3ecd9;line-height:1.9}
+.quote small{display:block;margin-top:10px;color:#aab89f;font-size:13px}
+@media (min-width:760px){.life-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* ============ 页脚 ============ */
+footer{background:var(--pine-900);color:#b9c4ae;padding:52px 0 44px;font-size:13.5px}
+footer .cols{display:grid;grid-template-columns:1fr;gap:26px}
+footer h4{font-family:var(--serif);color:#e9dfbe;font-size:15.5px;margin-bottom:10px}
+footer ul{list-style:none}
+footer li{line-height:1.9}
+footer a{color:#cfd8c6;text-decoration:underline;text-underline-offset:3px}
+footer a:hover{color:#f5efe1}
+footer .tail{margin-top:30px;border-top:1px solid rgba(200,162,74,.22);padding-top:18px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:space-between}
+@media (min-width:760px){footer .cols{grid-template-columns:1fr 1fr}}
+
+/* 回到顶部 */
+.top-btn{position:fixed;right:20px;bottom:20px;z-index:70;width:46px;height:46px;border-radius:50%;background:var(--red);color:#fbf3e6;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(12,28,20,.35);transition:transform .18s}
+.top-btn:hover{transform:translateY(-3px)}
+.top-btn.show{display:flex}
+.top-btn svg{width:20px;height:20px;fill:currentColor}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.place:hover{transform:none}}
+</style>
 </head>
 <body>
 
-  <!-- 名片主体：居中卡片 -->
-  <main class="card">
-
-    <!-- 圆形头像区域，使用内嵌 SVG 作为默认头像图标 -->
-    <div class="avatar">
-      <svg viewBox="0 0 24 24" width="56" height="56" fill="#ffffff" aria-hidden="true">
-        <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.4c-3.3 0-9.8 1.6-9.8 4.9v2.5h19.6v-2.5c0-3.3-6.5-4.9-9.8-4.9z"/>
-      </svg>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#hero"><span class="seal">蓉</span>成都 · 天府之国</a>
+    <nav class="nav-links" aria-label="页面导航">
+      <a href="#about">概览</a>
+      <a href="#history">历史</a>
+      <a href="#places">地标</a>
+      <a href="#food">美食</a>
+      <a href="#data">数据</a>
+      <a href="#life">生活</a>
+    </nav>
+    <div class="nav-extra">
+      <button class="music-btn" id="musicBtn" type="button" aria-label="播放或暂停背景音乐">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18.5a2.5 2.5 0 1 1-1-2l10-4.2V6.6a1 1 0 0 1 1.3-.95l2.7.9a1 1 0 0 1 .7 1v1.4a1 1 0 0 1-1.3.96L11.5 13.4v4.2c0 .3-.13.58-.34.78A2.47 2.47 0 0 1 9 18.5zM9.2 17c.27 0 .5-.22.5-.5v-3.7L19 10v3.8L9.2 17z"/></svg>
+        <span id="musicTxt">播放音乐</span>
+      </button>
+      <audio id="bgm" src="assets/music-moon.mp3" preload="none" loop></audio>
     </div>
+  </div>
+</header>
 
-    <!-- 姓名 -->
-    <h1 class="name">张伟</h1>
+<!-- ===== Hero ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-word" aria-hidden="true">蓉</div>
+  <div class="wrap hero-in">
+    <p class="kicker">CHENGDU · SICHUAN</p>
+    <h1>天府之国 <span class="hl">·</span> 成都</h1>
+    <p class="sub">雪山下的<b>公园城市</b>，烟火里的<b>幸福生活</b>。三千年来城名未改、城址未迁，<b>大熊猫</b>的故乡，<b>世界美食之都</b>，一座把日子过成诗的慢城市。</p>
+    <div class="stats">
+      <div class="stat"><div class="num">2147.4<em>万</em></div><div class="lab">常住人口（2024 年末）</div><div class="src">成都市统计局统计公报</div></div>
+      <div class="stat"><div class="num">23511.3<em>亿元</em></div><div class="lab">地区生产总值（2024）</div><div class="src">同比增 5.7%</div></div>
+      <div class="stat"><div class="num">1344.2<em>km²</em></div><div class="lab">建成区面积（2024 年末）</div><div class="src">成都市统计局统计公报</div></div>
+      <div class="stat"><div class="num">672.9<em>km</em></div><div class="lab">轨道交通运营里程</div><div class="src">2024 年日均客运约 600 万人次</div></div>
+    </div>
+  </div>
+</section>
 
-    <!-- 职位 -->
-    <p class="position">高级前端开发工程师</p>
+<!-- ===== 概览 ===== -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="no">01 · 概览</span>
+      <h2>一座来了就不想走的城市</h2>
+      <p>成都地处四川盆地西部、成都平原腹地，是四川省省会、成渝地区双城经济圈核心城市，也是中国西部重要的经济、文化、交通与科技创新中心。</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-copy">
+        <p class="lead">“九天开出一成都，万户千门入画图。”李白笔下的成都，自古便是物阜民丰的天府之国；杜甫寓居于此，写下“晓看红湿处，花重锦官城”。</p>
+        <p>这座城市以“慢”闻名：茶馆里的龙门阵、公园里的盖碗茶、火锅桌上的热闹，与高新区的写字楼灯火并存。2024 年末常住人口 2147.4 万人，正以公园城市理念重塑人与自然的边界——累计建成绿道约 9000 公里，全年空气质量优良天数 306 天，“开窗见雪山”是市民日常。</p>
+        <p>它也是面向世界的窗口：双流、天府两大国际机场 2024 年旅客吞吐量合计 8733.6 万人次，国际班列通达境外 118 个城市，外贸进出口总额 8390.0 亿元。</p>
+      </div>
+      <div class="key-grid">
+        <div class="key"><h3>别称：蓉城 · 锦官城</h3><p>五代时遍植芙蓉花，故称“蓉城”；三国蜀汉设锦官管理蜀锦生产，“锦官城”由此得名。</p></div>
+        <div class="key"><h3>三千年城址未迁</h3><p>自公元前 311 年张仪筑城以来，城名未改、城址未移，是中国城址延续最久的历史文化名城之一。</p></div>
+        <div class="key"><h3>公园城市首提地</h3><p>2018 年“公园城市”理念首次提出，成都作为首提地率先探索，让城市在公园里生长。</p></div>
+        <div class="key"><h3>亚洲首个世界美食之都</h3><p>2010 年联合国教科文组织授予成都“世界美食之都”称号，川菜与小吃从这里走向世界。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- 分隔线 -->
-    <hr class="divider">
+<!-- ===== 历史 ===== -->
+<section class="sec-alt" id="history">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="no">02 · 历史</span>
+      <h2>三千年的城，照见古今</h2>
+      <p>从古蜀文明到世界都市，成都的历史是一条从未断流的文脉。</p>
+    </div>
+    <div class="timeline">
+      <div class="tl">
+        <div class="tl-time">约前 1200 年</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body"><h3>金沙遗址：古蜀文明的中心</h3><p>商周时期金沙遗址出土的“太阳神鸟”金饰，如今已成为中国文化遗产标志。古蜀先民在这里创造了灿烂的青铜与黄金文明。</p></div>
+      </div>
+      <div class="tl">
+        <div class="tl-time">公元前 311 年</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body"><h3>张仪筑城，成都得名</h3><p>秦并巴蜀后，张仪主持筑成都城。《太平寰宇记》载“一年成邑，二年成都”，成都由此得名，2300 余年来城址一直延续至今。</p></div>
+      </div>
+      <div class="tl">
+        <div class="tl-time">公元 221 年</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body"><h3>蜀汉定都，三国风云</h3><p>刘备在成都建立蜀汉政权，武侯祠的香火延续至今，三国文化成为成都最鲜明的历史标签之一。</p></div>
+      </div>
+      <div class="tl">
+        <div class="tl-time">11 世纪初</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body"><h3>交子诞生：世界最早纸币</h3><p>北宋时期，成都民间商号发行“交子”，后由官府设立益州交子务正式发行，是世界上最早的纸币。</p></div>
+      </div>
+      <div class="tl">
+        <div class="tl-time">2010 年</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body"><h3>世界美食之都</h3><p>联合国教科文组织授予成都“美食之都”称号，成都成为亚洲首个获此殊荣的城市。</p></div>
+      </div>
+      <div class="tl">
+        <div class="tl-time">2024 年</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body"><h3>常住人口突破 2147 万</h3><p>成都迈入超大城市行列，是成渝地区双城经济圈的核心引擎，正加快建设践行新发展理念的公园城市示范区。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- 联系方式列表 -->
-    <ul class="contact-list">
-      <li class="contact-item">
-        <span class="contact-icon">📧</span>
-        <span class="contact-text">zhangwei@example.com</span>
-      </li>
-      <li class="contact-item">
-        <span class="contact-icon">📱</span>
-        <span class="contact-text">138-0000-0000</span>
-      </li>
-      <li class="contact-item">
-        <span class="contact-icon">📍</span>
-        <span class="contact-text">中国 · 上海</span>
-      </li>
-    </ul>
+<!-- ===== 地标 ===== -->
+<section id="places">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="no">03 · 地标</span>
+      <h2>从熊猫基地到宽窄巷子</h2>
+      <p>成都的每一处地标，都藏着一份独特的城市记忆。</p>
+    </div>
+    <div class="places-grid">
+      <article class="place">
+        <div class="ph" style="background-image:url(assets/panda.jpg)"><span class="tag">熊猫故乡</span></div>
+        <div class="bd"><h3>大熊猫繁育研究基地</h3><p>1987 年建成，全球知名的大熊猫保护科研机构。在这里能看到幼年熊猫攀树、吃竹、打闹的萌态，是成都最热门的打卡地之一。</p></div>
+      </article>
+      <article class="place">
+        <div class="ph" style="background-image:url(assets/kuanzhai-alley.jpg)"><span class="tag">老成都底片</span></div>
+        <div class="bd"><h3>宽窄巷子</h3><p>清代古街区，由宽巷子、窄巷子、井巷子组成。青砖灰瓦的川西民居院落里，茶馆、川剧、蜀锦与创意小店共生。</p></div>
+      </article>
+      <article class="place">
+        <div class="ph" style="background-image:url(assets/dujiangyan.jpg)"><span class="tag">世界遗产</span></div>
+        <div class="bd"><h3>都江堰</h3><p>约公元前 256 年李冰父子主持修建的无坝引水工程，两千多年来持续灌溉成都平原，2000 年列入世界文化遗产名录。</p></div>
+      </article>
+      <article class="place">
+        <div class="ph" style="background-image:url(assets/gaiwan-tea.jpg)"><span class="tag">百年茶馆</span></div>
+        <div class="bd"><h3>人民公园 · 鹤鸣茶社</h3><p>始创于 1923 年的老茶馆，竹椅、盖碗茶、掏耳朵，一碗茶从早喝到晚，是成都“慢生活”最生动的注脚。</p></div>
+      </article>
+      <article class="place">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h10a1 1 0 0 1 1 1v2h-1V4H7v8h3v-2h4v2h-1v1h-1v4h4v-2h1v3a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2h1v-4h2v-1h2v4h2v-3h-1v-2h-1V9h1V7h-1V3zM6 15H5a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h1v-4z"/></svg></div>
+        <div class="bd"><h3>武侯祠 · 锦里</h3><p>全国唯一君臣合祀祠庙，诸葛亮与刘备的香火千年不绝；一墙之隔的锦里古街，灯火、戏台与小吃构成了热闹的蜀汉风情。</p></div>
+      </article>
+      <article class="place">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v4h-1V6H5v12h6v1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm7 3h2v1h-2V8zm-4 3h10v1H7v-1zm0 3h6v1H7v-1z"/></svg></div>
+        <div class="bd"><h3>杜甫草堂</h3><p>诗圣杜甫流寓成都时的故居，《茅屋为秋风所破歌》《春夜喜雨》都诞生于此。红墙竹影间，仍能触摸大唐的诗意。</p></div>
+      </article>
+      <article class="place">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 8a2 2 0 1 1 4 0v6a6 6 0 0 1-12 0V8a2 2 0 1 1 4 0v5h1V8zm-1 6V8h-1v6a1 1 0 0 0 2 0zm8-4h5v1h-5a3 3 0 0 0-3 3 3 3 0 0 0 6 0v-4h2v4a5 5 0 0 1-10 0 5 5 0 0 1 5-4zm0 7a1 1 0 0 1 1-1v2a1 1 0 0 1-1-1z"/></svg></div>
+        <div class="bd"><h3>春熙路 · 太古里</h3><p>百年商业街与开放式街区交织，IFS“爬墙熊猫”是城市地标。新旧潮流在这里同框，是观察成都时尚面孔的最佳窗口。</p></div>
+      </article>
+      <article class="place">
+        <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 22 20H2L12 2zm0 4.5 3.5 7h-7l3.5-7zm0 9.5a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z"/></svg></div>
+        <div class="bd"><h3>西岭雪山</h3><p>“窗含西岭千秋雪，门泊东吴万里船。”杜甫诗句里的雪山如今仍是成都的日常风景，冬季滑雪、四季观景，距市区仅约 100 公里。</p></div>
+      </article>
+    </div>
+  </div>
+</section>
 
-  </main>
+<!-- ===== 美食 ===== -->
+<section class="sec-alt" id="food">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="no">04 · 美食</span>
+      <h2>世界美食之都，麻与辣的盛宴</h2>
+      <p>川菜的灵魂是“一菜一格，百菜百味”。成都的餐桌，是麻辣鲜香的交响曲，也是市井烟火的日常。</p>
+    </div>
+    <div class="food-show">
+      <div class="food-pic"><img src="assets/hotpot.jpg" alt="九宫格麻辣牛油火锅与丰富食材" loading="lazy"></div>
+      <div class="food-txt">
+        <h3>火锅：成都人的社交名片</h3>
+        <p>牛油锅底翻滚着花椒与辣椒，毛肚“七上八下”，黄喉、鸭肠、脑花各得其所。一顿火锅吃三小时，是成都朋友聚会的标配仪式。据统计，2024 年成都餐饮收入达 1355.2 亿元。</p>
+        <span class="badge">舌尖上的成都</span>
+      </div>
+    </div>
+    <div class="dish-grid">
+      <div class="dish"><span class="idx">01</span><span class="d-name">串串香</span><p>竹签串起百样食材，一把签子数钱结账，热气腾腾的市井美味。</p></div>
+      <div class="dish"><span class="idx">02</span><span class="d-name">担担面</span><p>芽菜肉臊浇头，红油麻酱裹着筋道面条，一碗不过瘾。</p></div>
+      <div class="dish"><span class="idx">03</span><span class="d-name">龙抄手</span><p>皮薄馅嫩的成都馄饨，红油与清汤两种吃法各有拥趸。</p></div>
+      <div class="dish"><span class="idx">04</span><span class="d-name">夫妻肺片</span><p>牛肉牛杂切片拌红油卤汁，麻辣鲜香，川菜凉菜之王。</p></div>
+      <div class="dish"><span class="idx">05</span><span class="d-name">钵钵鸡</span><p>藤椒油与辣椒油双拼的冷串串，乐山风味在成都遍地开花。</p></div>
+      <div class="dish"><span class="idx">06</span><span class="d-name">蛋烘糕</span><p>小铜锅烘出的软糯蛋饼，夹肉松、奶油或榨菜，甜咸皆宜。</p></div>
+      <div class="dish"><span class="idx">07</span><span class="d-name">甜水面</span><p>粗圆面条配甜辣酱汁，蒜香与红糖味在口中碰撞。</p></div>
+      <div class="dish"><span class="idx">08</span><span class="d-name">三大炮</span><p>糯米团敲响铜盘“咚咚咚”，裹黄豆面淋红糖，锦里的名角。</p></div>
+    </div>
+  </div>
+</section>
 
+<!-- ===== 数据 ===== -->
+<section id="data">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="no">05 · 数据</span>
+      <h2>用数字看见成都</h2>
+      <p>以下数据均来自成都市统计局《2024 年成都市国民经济和社会发展统计公报》；历年 GDP 为第五次全国经济普查修订口径。</p>
+    </div>
+    <div class="data-wrap">
+      <div class="chart-card">
+        <h3>地区生产总值（亿元，2020—2024）</h3>
+        <p class="note">五年间经济总量跨过 6 个千亿级台阶，2024 年按不变价格增长 5.7%。</p>
+        <div class="chart" id="chart-gdp"><p style="font-size:13px;color:var(--muted)">2024 年地区生产总值 23511.3 亿元，比上年增长 5.7%。</p></div>
+      </div>
+      <div class="chart-card">
+        <h3>2024 年三次产业增加值（亿元）</h3>
+        <p class="note">产业结构 2.3 : 28.7 : 69.0，第三产业贡献了七成经济增量。</p>
+        <div class="chart" id="chart-industry"><p style="font-size:13px;color:var(--muted)">第一产业 540.1 亿元、第二产业 6752.9 亿元、第三产业 16218.3 亿元。</p></div>
+      </div>
+    </div>
+    <p class="data-src">数据来源：<a href="https://www.chengdu.gov.cn/cdsrmzf/c167426/2025-03/28/content_39ca3d2fcbca44b988b39e428f161561.shtml" target="_blank" rel="noopener">成都市人民政府 · 2024 年成都市国民经济和社会发展统计公报</a>；历年 GDP 修订口径参考中经数据（豆包官方合作数据库）。</p>
+  </div>
+</section>
+
+<!-- ===== 生活 ===== -->
+<section class="sec-dark" id="life">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="no">06 · 生活</span>
+      <h2 style="color:#f3ecd9">有一种幸福，叫成都</h2>
+      <p style="color:#aab89f">城市可以很拼，生活也可以很慢——这是成都教给世界的平衡之道。</p>
+    </div>
+    <div class="life-grid">
+      <div class="life"><div class="big">安逸</div><p>“安逸”是成都人的最高赞美。公园里晒太阳、茶馆里摆龙门阵、麻将桌上消磨下午——把日子过成享受，是这座城市的底层代码。</p></div>
+      <div class="life"><div class="big">巴适</div><p>“巴适”指舒服妥帖。一碗面、一场雨后的雪山、一顿热闹的火锅，成都人擅长从寻常事物里找到最熨帖的满足感。</p></div>
+      <div class="life"><div class="big">烟火</div><p>市井烟火气是成都最迷人的部分：菜市场的叫卖、深夜的串串香、街角的手艺人。2024 年末成都拥有博物馆 201 座、三甲医院 55 家，烟火与文明并存。</p></div>
+    </div>
+    <div class="quote">
+      <p>“明月几时有，把酒问青天。”——苏轼《水调歌头》</p>
+      <small>词作者苏轼为蜀地眉山人，眉山地处成都都市圈。页面背景音乐选用蔡琴演唱版本，愿你在这座城市也找到属于自己的月光。</small>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>资料与数据</h4>
+        <ul>
+          <li><a href="https://www.chengdu.gov.cn/cdsrmzf/c167426/2025-03/28/content_39ca3d2fcbca44b988b39e428f161561.shtml" target="_blank" rel="noopener">2024 年成都市国民经济和社会发展统计公报（成都市统计局）</a></li>
+          <li>历年地区生产总值按第五次全国经济普查修订口径（中经数据）</li>
+          <li>历史沿革依据《太平寰宇记》等公开史料；“世界美食之都”为联合国教科文组织 2010 年授称</li>
+        </ul>
+      </div>
+      <div>
+        <h4>素材说明</h4>
+        <ul>
+          <li>图片经网络检索获得（图虫创意、视觉中国、千图网、百科等），版权归原作者所有，仅用于学习展示</li>
+          <li>背景音乐：蔡琴《明月几时有》（用户提供，词·苏轼），需手动点击播放</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tail">
+      <span>成都 · 天府之国 — 雪山下的公园城市</span>
+      <span>做一个网页，认识一座城 · 2026</span>
+    </div>
+  </div>
+</footer>
+
+<button class="top-btn" id="topBtn" type="button" aria-label="回到顶部">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6l6 7h-4v5h-4v-5H6l6-7z"/></svg>
+</button>
+
+<script>
+/* ===== 背景音乐（需用户点击播放） ===== */
+(function(){
+  var btn=document.getElementById('musicBtn'),txt=document.getElementById('musicTxt'),audio=document.getElementById('bgm');
+  btn.addEventListener('click',function(){
+    if(audio.paused){
+      audio.play().then(function(){btn.classList.add('playing');txt.textContent='暂停音乐';}).catch(function(){txt.textContent='无法播放';});
+    }else{
+      audio.pause();btn.classList.remove('playing');txt.textContent='播放音乐';
+    }
+  });
+})();
+
+/* ===== 回到顶部 ===== */
+(function(){
+  var topBtn=document.getElementById('topBtn');
+  window.addEventListener('scroll',function(){
+    if(window.scrollY>600){topBtn.classList.add('show');}else{topBtn.classList.remove('show');}
+  });
+  topBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+})();
+
+/* ===== 图表 ===== */
+(function(){
+  if(typeof echarts==='undefined'){return;}
+  var palette=['#b6432e','#c8a24a','#2f7d5c'];
+  var gdp=document.getElementById('chart-gdp');if(gdp){gdp.innerHTML='';echarts.init(gdp).setOption({
+    title:{text:'',left:'center'},
+    tooltip:{trigger:'axis',triggerOn:'click',renderMode:'richText',confine:true,
+      formatter:function(p){var v=p[0];return v.name+' 年：'+Number(v.value).toLocaleString()+' 亿元';}},
+    grid:{left:8,right:12,top:26,bottom:8,containLabel:true},
+    xAxis:{type:'category',data:['2020','2021','2022','2023','2024'],axisLabel:{fontSize:12,color:'#6d6a5c'},axisLine:{lineStyle:{color:'#d8cfba'}}},
+    yAxis:{type:'value',name:'万亿元',nameTextStyle:{color:'#6d6a5c'},axisLabel:{fontSize:11,color:'#6d6a5c',formatter:function(v){return (v/10000).toFixed(2);}},splitLine:{lineStyle:{color:'#ece4d0'}}},
+    series:[{type:'bar',data:[18222.2,20367.5,21100.9,22336.6,23511.3],barWidth:'46%',
+      itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2f7d5c'},{offset:1,color:'#1e5c41'}]),borderRadius:[6,6,0,0]},
+      label:{show:true,position:'top',fontSize:11,color:'#262219',formatter:function(p){return (p.value/10000).toFixed(2)+'万亿';}},
+      emphasis:{itemStyle:{color:'#c8a24a'}}}]
+  });}
+  var ind=document.getElementById('chart-industry');if(ind){ind.innerHTML='';echarts.init(ind).setOption({
+    tooltip:{trigger:'axis',triggerOn:'click',renderMode:'richText',confine:true,
+      formatter:function(p){var v=p[0];return v.name+'：'+Number(v.value).toLocaleString()+' 亿元';}},
+    grid:{left:8,right:16,top:14,bottom:8,containLabel:true},
+    xAxis:{type:'value',name:'亿元',nameTextStyle:{color:'#6d6a5c'},axisLabel:{fontSize:11,color:'#6d6a5c'},splitLine:{lineStyle:{color:'#ece4d0'}}},
+    yAxis:{type:'category',data:['第一产业','第二产业','第三产业'],axisLabel:{fontSize:12,color:'#262219'},axisLine:{lineStyle:{color:'#d8cfba'}}},
+    series:[{type:'bar',data:[540.1,6752.9,16218.3],barWidth:'42%',
+      itemStyle:{borderRadius:[0,6,6,0]},
+      label:{show:true,position:'right',fontSize:11,color:'#262219',formatter:function(p){return Number(p.value).toLocaleString();}},
+      color:function(params){return palette[params.dataIndex]||palette[0];}}]
+  });}
+  window.addEventListener('resize',function(){
+    var els=document.querySelectorAll('.chart');for(var i=0;i<els.length;i++){var c=echarts.getInstanceByDom(els[i]);if(c){c.resize();}}
+  });
+})();
+</script>
 </body>
 </html>
